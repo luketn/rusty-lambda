@@ -10,11 +10,12 @@ async fn main() -> Result<(), Error> {
 async fn func(event: Request) -> Result<impl IntoResponse, Error> {
     let query_string_parameters = event.query_string_parameters();
     let first_name = query_string_parameters.first("firstName");
+    let greeting = greeting_for_name(first_name);
 
-    Ok(response_from_name(first_name).into_response())
+    Ok(greeting.into_response())
 }
 
-fn response_from_name(first_name: Option<&str>) -> String {
+fn greeting_for_name(first_name: Option<&str>) -> String {
     if let Some(first_name) = first_name {
         format!("Hello, {first_name}!")
     } else {
@@ -28,14 +29,14 @@ mod tests {
     use super::*;
 
     #[tokio::test]
-    async fn response_from_name_test_with_param() {
-        let result = response_from_name(Some("Luke"));
+    async fn greeting_for_name_test_with_param() {
+        let result = greeting_for_name(Some("Luke"));
         assert_eq!(result, "Hello, Luke!")
     }
 
     #[tokio::test]
-    async fn response_from_name_test_without_param() {
-        let result = response_from_name(None);
+    async fn greeting_for_name_test_without_param() {
+        let result = greeting_for_name(None);
         assert_eq!(result, "Hello, rusty world! Add a query parameter 'firstName' for a personalised greeting.")
     }
 
