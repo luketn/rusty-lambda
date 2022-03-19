@@ -1,4 +1,4 @@
-use lambda_http::{service_fn, Error, RequestExt, Request, IntoResponse};
+use lambda_http::{service_fn, Error, RequestExt, Request, IntoResponse, Response, Body};
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
@@ -7,7 +7,7 @@ async fn main() -> Result<(), Error> {
     Ok(())
 }
 
-async fn func(event: Request) -> Result<impl IntoResponse, Error> {
+async fn func(event: Request) -> Result<Response<Body>, Error> {
     let query_string_parameters = event.query_string_parameters();
     let first_name = query_string_parameters.first("firstName");
     let greeting = greeting_for_name(first_name);
@@ -27,6 +27,7 @@ fn greeting_for_name(first_name: Option<&str>) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use maplit::*;
 
     #[tokio::test]
     async fn greeting_for_name_test_with_param() {
@@ -40,4 +41,22 @@ mod tests {
         assert_eq!(result, "Hello, rusty world! Add a query parameter 'firstName' for a personalised greeting.")
     }
 
+
+    fn request_with_query_param(key: &str, value: &str) -> Request {
+        let params = hashmap! {
+            key.into() => vec![value.into()]
+        };
+        Request::default().with_query_string_parameters(params.clone())
+    }
+
+    #[tokio::test]
+    async fn func_test() {
+        let request = request_with_query_param("firstName", "Luke");
+        let result = func(request).await;
+
+        let response = result.expect("Failed to build response");
+
+        assert_eq!(response.status(), 200);
+        //TODO: assert_eq!(String::from_utf8(response.body().bytes()), "Hello, Luke!");
+    }
 }
