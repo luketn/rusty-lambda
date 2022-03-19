@@ -11,9 +11,32 @@ async fn func(event: Request) -> Result<impl IntoResponse, Error> {
     let query_string_parameters = event.query_string_parameters();
     let first_name = query_string_parameters.first("firstName");
 
+    Ok(response_from_name(first_name).into_response())
+}
+
+fn response_from_name(first_name: Option<&str>) -> String {
     if let Some(first_name) = first_name {
-        Ok(format!("Hello, {first_name}!").into_response())
+        format!("Hello, {first_name}!")
     } else {
-        Ok("Hello, rusty world! Add a query parameter 'firstName' for a personalised greeting.".into_response())
+        String::from("Hello, rusty world! Add a query parameter 'firstName' for a personalised greeting.")
     }
+}
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn response_from_name_test_with_param() {
+        let result = response_from_name(Some("Luke"));
+        assert_eq!(result, "Hello, Luke!")
+    }
+
+    #[tokio::test]
+    async fn response_from_name_test_without_param() {
+        let result = response_from_name(None);
+        assert_eq!(result, "Hello, rusty world! Add a query parameter 'firstName' for a personalised greeting.")
+    }
+
 }

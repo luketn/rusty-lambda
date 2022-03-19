@@ -640,10 +640,9 @@ dependencies = [
 
 [[package]]
 name = "rusty-lambda"
-version = "0.1.0"
+version = "0.0.1"
 dependencies = [
  "lambda_http",
- "lambda_runtime",
  "serde_json",
  "tokio",
 ]
