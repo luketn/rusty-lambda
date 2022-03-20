@@ -33,7 +33,7 @@ mod tests {
     #[tokio::test]
     async fn greeting_for_name_test_with_param() {
         let result = greeting_for_name(Some("Luke"));
-        assert_eq!(result, "Hello there, Luke!")
+        assert_eq!(result, "Hello, Luke!")
     }
 
     #[tokio::test]
