@@ -17,7 +17,7 @@ async fn func(event: Request) -> Result<Response<Body>, Error> {
 
 fn greeting_for_name(first_name: Option<&str>) -> String {
     if let Some(first_name) = first_name {
-        format!("Hello there, {first_name}!")
+        format!("Hello, {first_name}!")
     } else {
         String::from(
             "Hello, rusty world! Add a query parameter 'firstName' for a personalised greeting.",
@@ -62,7 +62,7 @@ mod tests {
         assert_eq!(response.status(), 200);
         assert_eq!(
             String::from_utf8(response.body().to_vec()).expect("Convert body to string"),
-            "Hello there, Luke!"
+            "Hello, Luke!"
         );
     }
 }
