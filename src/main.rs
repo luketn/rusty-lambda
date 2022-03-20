@@ -1,4 +1,4 @@
-use lambda_http::{service_fn, Error, RequestExt, Request, IntoResponse, Response, Body};
+use lambda_http::{service_fn, Body, Error, IntoResponse, Request, RequestExt, Response};
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
@@ -19,10 +19,11 @@ fn greeting_for_name(first_name: Option<&str>) -> String {
     if let Some(first_name) = first_name {
         format!("Hello, {first_name}!")
     } else {
-        String::from("Hello, rusty world! Add a query parameter 'firstName' for a personalised greeting.")
+        String::from(
+            "Hello, rusty world! Add a query parameter 'firstName' for a personalised greeting.",
+        )
     }
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -38,9 +39,11 @@ mod tests {
     #[tokio::test]
     async fn greeting_for_name_test_without_param() {
         let result = greeting_for_name(None);
-        assert_eq!(result, "Hello, rusty world! Add a query parameter 'firstName' for a personalised greeting.")
+        assert_eq!(
+            result,
+            "Hello, rusty world! Add a query parameter 'firstName' for a personalised greeting."
+        )
     }
-
 
     fn request_with_query_param(key: &str, value: &str) -> Request {
         let params = hashmap! {
@@ -57,6 +60,9 @@ mod tests {
         let response = result.expect("Failed to build response");
 
         assert_eq!(response.status(), 200);
-        //TODO: assert_eq!(String::from_utf8(response.body().bytes()), "Hello, Luke!");
+        assert_eq!(
+            String::from_utf8(response.body().to_vec()).expect("Convert body to string"),
+            "Hello, Luke!"
+        );
     }
 }
