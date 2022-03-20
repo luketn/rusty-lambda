@@ -1,7 +1,7 @@
 set -euo pipefail
 
-docker run -it --rm -v $(pwd):/code --name rust-lambda-compiler -d --entrypoint /bin/bash luketn/rust-lambda-compiler || echo "Already running"
-docker exec -it rust-lambda-compiler cargo build --release --target aarch64-unknown-linux-gnu
+docker run --rm -v $(pwd):/code --name rust-lambda-compiler -d --entrypoint /bin/bash luketn/rust-lambda-compiler || echo "Already running"
+docker exec rust-lambda-compiler cargo build --release --target aarch64-unknown-linux-gnu
 
 rm -rf ./out-deploy
 mkdir -p ./out-deploy
