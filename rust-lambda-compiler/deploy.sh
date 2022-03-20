@@ -1,0 +1,1 @@
+docker buildx build --push -t luketn/rust-lambda-compiler --platform linux/amd64,linux/arm64 .
