@@ -19,4 +19,7 @@ Setup the .cargo/config.toml file with this:
 ```
 [target.aarch64-unknown-linux-gnu]
 linker = "aarch64-unknown-linux-gnu-gcc"
+
+[target.x86_64-unknown-linux-gnu]
+linker = "x86_64-unknown-linux-gnu-gcc"
 ```
