@@ -17,7 +17,7 @@ async fn func(event: Request) -> Result<Response<Body>, Error> {
 
 fn greeting_for_name(first_name: Option<&str>) -> String {
     if let Some(first_name) = first_name {
-        format!("Hello, {first_name}!")
+        format!("Hello there, {first_name}!")
     } else {
         String::from(
             "Hello, rusty world! Add a query parameter 'firstName' for a personalised greeting.",
@@ -33,7 +33,7 @@ mod tests {
     #[tokio::test]
     async fn greeting_for_name_test_with_param() {
         let result = greeting_for_name(Some("Luke"));
-        assert_eq!(result, "Hello, Luke!")
+        assert_eq!(result, "Hello there, Luke!")
     }
 
     #[tokio::test]
@@ -62,7 +62,7 @@ mod tests {
         assert_eq!(response.status(), 200);
         assert_eq!(
             String::from_utf8(response.body().to_vec()).expect("Convert body to string"),
-            "Hello, Luke!"
+            "Hello there, Luke!"
         );
     }
 }
